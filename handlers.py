@@ -1,9 +1,13 @@
 from app import app
 from models import Order
 import json
-from session import get_user_data
+import session
 
-@app.route('/')
-def hello_world():
-    (username, typ) = get_user_data()
+@app.route('/api/order')
+def get_orders():
+    (username, typ) = session.get_user_data()
     return json.dumps(Order.query.all())
+
+@app.route('/api/mock/session', methods = ['POST'])
+def mock_login():
+    session.mock_login()
