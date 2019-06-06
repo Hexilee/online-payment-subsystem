@@ -1,4 +1,5 @@
 from db import db
+from sqlalchemy.sql.sqltypes import TIMESTAMP
 
 class Buyer(db.Model):
     __tablename__ = "Buyer"
@@ -16,5 +17,11 @@ class Order(db.Model):
     order_id = db.Column(db.Integer, primary_key=True, nullable=False, name="OrderNo")
     buyer_id = db.Column(db.Integer, db.ForeignKey('Buyer.BuyerId'), nullable=False, name="BuyerId")
     seller_id = db.Column(db.Integer, db.ForeignKey('Seller.SellerId'), nullable=False, name="SellerId")
-
-db.create_all()
+    good_name = db.Column(db.String(255), nullable=False, name="GoodName")
+    order_state = db.Column(db.String(8), nullable=False, name="OrderState")
+    order_time = db.Column(TIMESTAMP, nullable=False, name="OrderTime")
+    pay_time = db.Column(TIMESTAMP, name="PayTime")
+    deliver_time = db.Column(TIMESTAMP, name="DeliverTime")
+    cancel_time = db.Column(TIMESTAMP, name="CancelTime")
+    success_time = db.Column(TIMESTAMP, name="SuccessTime")
+    amount = db.Column(db.Numeric(10, 2), nullable=False, name="Amount")
