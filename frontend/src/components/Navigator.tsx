@@ -22,20 +22,20 @@ const categories = [
     {
         id: 'Develop',
         children: [
-            { id: 'Authentication', icon: <PeopleIcon />, active: true },
-            { id: 'Database', icon: <DnsRoundedIcon /> },
-            { id: 'Storage', icon: <PermMediaOutlinedIcon /> },
-            { id: 'Hosting', icon: <PublicIcon /> },
-            { id: 'Functions', icon: <SettingsEthernetIcon /> },
-            { id: 'ML Kit', icon: <SettingsInputComponentIcon /> },
+            {id: 'Authentication', icon: <PeopleIcon/>, active: true},
+            {id: 'Database', icon: <DnsRoundedIcon/>},
+            {id: 'Storage', icon: <PermMediaOutlinedIcon/>},
+            {id: 'Hosting', icon: <PublicIcon/>},
+            {id: 'Functions', icon: <SettingsEthernetIcon/>},
+            {id: 'ML Kit', icon: <SettingsInputComponentIcon/>},
         ],
     },
     {
         id: 'Quality',
         children: [
-            { id: 'Analytics', icon: <SettingsIcon /> },
-            { id: 'Performance', icon: <TimerIcon /> },
-            { id: 'Test Lab', icon: <PhonelinkSetupIcon /> },
+            {id: 'Analytics', icon: <SettingsIcon/>},
+            {id: 'Performance', icon: <TimerIcon/>},
+            {id: 'Test Lab', icon: <PhonelinkSetupIcon/>},
         ],
     },
 ];
@@ -82,16 +82,16 @@ const styles = (theme: Theme) => createStyles({
 });
 
 const Navigator: React.FunctionComponent<NavigatorProps> = (props) => {
-    const { classes, ...other } = props;
+    const {classes, ...other} = props;
     return (
         <Drawer variant="permanent" {...other}>
             <List disablePadding>
                 <ListItem className={clsx(classes.firebase, classes.item, classes.itemCategory)}>
                     Paperbase
-        </ListItem>
+                </ListItem>
                 <ListItem className={clsx(classes.item, classes.itemCategory)}>
                     <ListItemIcon className={classes.itemIcon}>
-                        <HomeIcon />
+                        <HomeIcon/>
                     </ListItemIcon>
                     <ListItemText
                         classes={{
@@ -99,9 +99,9 @@ const Navigator: React.FunctionComponent<NavigatorProps> = (props) => {
                         }}
                     >
                         Project Overview
-          </ListItemText>
+                    </ListItemText>
                 </ListItem>
-                {categories.map(({ id, children }) => (
+                {categories.map(({id, children}) => (
                     <React.Fragment key={id}>
                         <ListItem className={classes.categoryHeader}>
                             <ListItemText
@@ -112,7 +112,7 @@ const Navigator: React.FunctionComponent<NavigatorProps> = (props) => {
                                 {id}
                             </ListItemText>
                         </ListItem>
-                        {children.map(({ id: childId, icon, active }) => (
+                        {children.map(({id: childId, icon, active}) => (
                             <ListItem
                                 key={childId}
                                 button
@@ -128,15 +128,16 @@ const Navigator: React.FunctionComponent<NavigatorProps> = (props) => {
                                 </ListItemText>
                             </ListItem>
                         ))}
-                        <Divider className={classes.divider} />
+                        <Divider className={classes.divider}/>
                     </React.Fragment>
                 ))}
             </List>
         </Drawer>
     );
+};
+
+
+interface NavigatorProps extends WithStyles<typeof styles> {
 }
-
-
-interface NavigatorProps extends WithStyles<typeof styles> {};
 
 export default withStyles(styles)(Navigator);
