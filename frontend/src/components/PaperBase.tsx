@@ -9,6 +9,11 @@ import Header from './Header';
 
 let theme = createMuiTheme({
     typography: {
+        fontFamily: [
+            'Sarasa Gothic',
+            '-apple-system',
+            'Arial',
+        ].join(','),
         h5: {
             fontWeight: 500,
             fontSize: 26,

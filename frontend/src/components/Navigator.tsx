@@ -2,7 +2,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { withStyles, WithStyles, Theme, createStyles } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
+import Drawer, { DrawerProps } from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -137,7 +137,7 @@ const Navigator: React.FunctionComponent<NavigatorProps> = (props) => {
 };
 
 
-interface NavigatorProps extends WithStyles<typeof styles> {
+interface NavigatorProps extends WithStyles<typeof styles>, Omit<DrawerProps, 'classes'> {
 }
 
 export default withStyles(styles)(Navigator);
