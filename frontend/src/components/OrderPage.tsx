@@ -4,7 +4,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { MouseEventHandler } from 'react';
 import * as React from 'react';
 import { withStyles, WithStyles, Theme, createStyles, Typography } from '@material-ui/core';
 import moment, { Moment } from 'moment';
@@ -35,11 +34,11 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
         this.handlePagination(0);
     }
 
-    handleDialogClose() {
+    handleDialogClose = () => {
         this.setState(state => ({...state, error: {...state.error, display: false}}));
-    }
+    };
 
-    handlePagination(offset: number) {
+    handlePagination = (offset: number) => {
         const {orderType, endTime, searchWords} = this.props;
         const url = encodeURI(`${BASE_URL}/order?orderType=${orderType}&endTime=${endTime.valueOf()}&searchWords=${searchWords}&offset=${offset}&limit=${PAGE_LIMIT}`);
         fetch(url)
@@ -76,7 +75,7 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
                     }))
                 }
             });
-    }
+    };
 
     render = () => {
         return (
