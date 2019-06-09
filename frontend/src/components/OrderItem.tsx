@@ -25,7 +25,7 @@ interface OrderItemProps extends WithStyles<typeof styles> {
 }
 
 export class ItemData {
-    orderId: number = 0;
+    id: number = 0;
     orderState: number = 0;
     goodName: string = "";
     goodDescription: string = "";

@@ -12,24 +12,28 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Pagination from 'material-ui-flat-pagination';
 import OrderItem, { ItemData } from './OrderItem';
 import { Type } from 'serializer.ts/Decorators';
-import { BASE_URL } from './config';
+import { BASE_URL, PAGE_LIMIT } from './config';
 
 const styles = (theme: Theme) => createStyles({});
 
 class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
-    state = {
-        offset: 0,
-        totalItem: 0,
-        userType: 0,
-        items: [],
-        error: {
-            display: false,
-            title: '',
-            content: '',
-            handlePositiveAction: () => {
+    constructor(props: OrderPageProps) {
+        super(props);
+        this.state = {
+            offset: 0,
+            totalItem: 0,
+            userType: 0,
+            items: [],
+            error: {
+                display: false,
+                title: '',
+                content: '',
+                handlePositiveAction: () => {
+                },
             },
-        },
-    };
+        };
+        this.handlePagination(0);
+    }
 
     handleDialogClose() {
         this.setState(state => ({...state, error: {...state.error, display: false}}));
@@ -37,7 +41,7 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
 
     handlePagination(offset: number) {
         const {orderType, endTime, searchWords} = this.props;
-        const url = encodeURI(`${BASE_URL}/order?orderType=${orderType}&endTime=${endTime.valueOf()}&searchWords=${searchWords}&offset=${offset}`);
+        const url = encodeURI(`${BASE_URL}/order?orderType=${orderType}&endTime=${endTime.valueOf()}&searchWords=${searchWords}&offset=${offset}&limit=${PAGE_LIMIT}`);
         fetch(url)
             .then(resp => {
                 if (!resp.ok) {
@@ -65,7 +69,7 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
                         ...state, error: {
                             display: true,
                             title: '未知错误',
-                            content: '请检查网络连接或联系系统管理员',
+                            content: `请检查网络连接或联系系统管理员${err.toString()}`,
                             handlePositiveAction: () => {
                             }
                         }
@@ -83,7 +87,7 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
                 </Typography>
                 <CssBaseline/>
                 <Pagination
-                    limit={15}
+                    limit={PAGE_LIMIT}
                     offset={this.state.offset}
                     total={this.state.totalItem}
                     onClick={(e, offset) => this.handlePagination(offset)}
