@@ -4,6 +4,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Grid from '@material-ui/core/Grid';
 import * as React from 'react';
 import { withStyles, WithStyles, Theme, createStyles, Typography } from '@material-ui/core';
 import moment, { Moment } from 'moment';
@@ -13,7 +14,16 @@ import OrderItem, { ItemData } from './OrderItem';
 import { Type } from 'serializer.ts/Decorators';
 import { BASE_URL, PAGE_LIMIT } from './config';
 
-const styles = (theme: Theme) => createStyles({});
+const styles = (theme: Theme) => createStyles({
+    root: {
+        flexGrow: 1,
+    },
+
+    grid: {
+        margin: 'auto',
+        width: '100%'
+    }
+});
 
 class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
     constructor(props: OrderPageProps) {
@@ -49,7 +59,7 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
                 return resp.json() as Promise<OrderPageData>
             })
             .then(data => {
-                this.setState(state => ({error: state.error, offset: offset, ...data}));
+                this.setState(state => ({...state, offset: offset, ...data}));
             })
             .catch(err => {
                 if (err.message === '403') {
@@ -78,12 +88,17 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
     };
 
     render = () => {
+        const {classes} = this.props;
         return (
-            <div>
-                <Typography>
-                    props: {JSON.stringify(this.props)}<br/>
-                    state: {JSON.stringify(this.state)}
-                </Typography>
+            <div className={classes.root}>
+                <Grid container spacing={2}>{
+                    this.state.items.map(item => (
+                        <Grid item key={item.id} className={classes.grid}>
+                            <OrderItem item={item}/>
+                        </Grid>
+                    ))
+                }
+                </Grid>
                 <CssBaseline/>
                 <Pagination
                     limit={PAGE_LIMIT}
