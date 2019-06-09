@@ -1,4 +1,5 @@
 import { blue, cyan, green, grey, yellow } from '@material-ui/core/colors';
+import Tooltip from '@material-ui/core/Tooltip';
 import { black } from 'material-ui/styles/colors';
 import * as React from 'react';
 import { withStyles, WithStyles, Theme, createStyles, makeStyles } from '@material-ui/core';
@@ -15,8 +16,11 @@ import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
+import Icon from '@material-ui/icons/'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import moment from 'moment';
+import Button from '@material-ui/core/Button';
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -32,6 +36,10 @@ const styles = (theme: Theme) =>
             },
             avatar: {
                 backgroundColor: randomColor(),
+            },
+            price: {
+                fontSize: theme.spacing(3),
+                color: red[500]
             },
         },
     );
@@ -55,27 +63,24 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
                         {item.goodName[0]}
                     </Avatar>
                 }
-                // action={
-                //     <IconButton aria-label="Settings">
-                //         <MoreVertIcon/>
-                //     </IconButton>
-                // }
                 title={item.goodName}
-                subheader={item.orderTime}
+                subheader={`下单时间：${moment(item.orderTime * 1000).format('YYYY/MM/DD HH:MM:SS')}`}
             />
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    This impressive paella is a perfect party dish and a fun meal to cook together with your
-                    guests. Add 1 cup of frozen peas along with the mussels, if you like.
+                    {item.goodDescription}
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
-                <IconButton aria-label="Add to favorites">
-                    <FavoriteIcon/>
-                </IconButton>
-                <IconButton aria-label="Share">
-                    <ShareIcon/>
-                </IconButton>
+                <Button color="primary">
+                    支付
+                </Button>
+                <Button color="primary">
+                    取消
+                </Button>
+                <Typography className={classes.price}>
+                    ￥{item.amount}
+                </Typography>
                 <IconButton
                     className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,
@@ -129,11 +134,11 @@ export class ItemData {
     goodDescription: string = '';
     sellerName: string = '';
     buyerName: string = '';
-    orderTime: Date = new Date();
-    payTime?: Date;
-    deliverTime?: Date;
-    completeTime?: Date;
-    cancelTime?: Date;
+    orderTime: number = new Date().getTime() / 1000;
+    payTime?: number;
+    deliverTime?: number;
+    completeTime?: number;
+    cancelTime?: number;
     amount: number = 0;
 }
 
