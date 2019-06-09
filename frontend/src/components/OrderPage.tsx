@@ -11,7 +11,8 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
     state = {
         offset: 0,
         totalItem: 0,
-        items: []
+        userType: 0,
+        items: [],
     };
 
     handlePagination(offset: number) {
@@ -46,6 +47,7 @@ interface OrderPageProps extends WithStyles<typeof styles> {
 interface OrderPageState {
     offset: number;
     totalItem: number;
+    userType: number;
     items: ItemData[];
 }
 

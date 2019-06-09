@@ -121,6 +121,8 @@ const Header: React.FunctionComponent<HeaderProps> = props => {
                     <Tab textColor="inherit" label="待支付"/>
                     <Tab textColor="inherit" label="待发货"/>
                     <Tab textColor="inherit" label="待收货"/>
+                    <Tab textColor="inherit" label="已完成"/>
+                    <Tab textColor="inherit" label="已取消"/>
                 </Tabs>
             </AppBar>
         </React.Fragment>
