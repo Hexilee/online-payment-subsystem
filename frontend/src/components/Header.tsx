@@ -118,7 +118,7 @@ const Header: React.FunctionComponent<HeaderProps> = props => {
                 elevation={0}
             >
                 <Tabs value={orderType} textColor="inherit" onChange={handleTabsChange}>
-                    <Tab textColor="inherit" label="待支付"/>
+                    <Tab textColor="inherit" label="待付款"/>
                     <Tab textColor="inherit" label="待发货"/>
                     <Tab textColor="inherit" label="待收货"/>
                     <Tab textColor="inherit" label="已完成"/>

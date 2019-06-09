@@ -50,7 +50,7 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
 
     handlePagination = (offset: number) => {
         const {orderType, endTime, searchWords} = this.props;
-        const url = encodeURI(`${BASE_URL}/order?orderType=${orderType}&endTime=${endTime.valueOf()}&searchWords=${searchWords}&offset=${offset}&limit=${PAGE_LIMIT}`);
+        const url = encodeURI(`${BASE_URL}/order?orderType=${orderType}&endTime=${Math.floor(endTime.valueOf()/ 1000)}&searchWords=${searchWords}&offset=${offset}&limit=${PAGE_LIMIT}`);
         fetch(url)
             .then(resp => {
                 if (!resp.ok) {
