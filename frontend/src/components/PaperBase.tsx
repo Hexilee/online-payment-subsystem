@@ -186,7 +186,7 @@ class PaperBase extends React.Component<PaperBaseProps, PaperBaseState> {
                         <Header onDrawerToggle={this.handleDrawerToggle} orderType={this.state.orderType}
                                 handleTabsChange={this.handleTabsChange}/>
                         <main className={classes.mainContent}>
-                            <Content/>
+                            <Content orderType={this.state.orderType}/>
                         </main>
                     </div>
                 </div>
