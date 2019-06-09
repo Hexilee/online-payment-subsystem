@@ -49,8 +49,8 @@ const styles = (theme: Theme) => createStyles({
         color: theme.palette.common.white,
     },
     item: {
-        paddingTop: 1,
-        paddingBottom: 1,
+        paddingTop: 5,
+        paddingBottom: 5,
         color: 'rgba(255, 255, 255, 0.7)',
         '&:hover,&:focus': {
             backgroundColor: 'rgba(255, 255, 255, 0.08)',

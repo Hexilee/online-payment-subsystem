@@ -91,7 +91,6 @@ theme = {
         },
         MuiListItemText: {
             primary: {
-                margin: 10,
                 fontWeight: theme.typography.fontWeightMedium,
             },
         },
