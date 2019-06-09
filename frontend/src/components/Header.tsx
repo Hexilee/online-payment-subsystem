@@ -43,7 +43,7 @@ const styles = (theme: Theme) => createStyles({
 });
 
 const Header: React.FunctionComponent<HeaderProps> = props => {
-    const {classes, onDrawerToggle} = props;
+    const {classes, onDrawerToggle, orderType, handleTabsChange} = props;
     return (
         <React.Fragment>
             <AppBar color="primary" position="sticky" elevation={0}>
@@ -53,7 +53,7 @@ const Header: React.FunctionComponent<HeaderProps> = props => {
                             <Grid item>
                                 <IconButton
                                     color="inherit"
-                                    aria-label="Open drawer"
+                                    aria-label="打开工具栏"
                                     onClick={onDrawerToggle}
                                     className={classes.menuButton}
                                 >
@@ -63,7 +63,7 @@ const Header: React.FunctionComponent<HeaderProps> = props => {
                         </Hidden>
                         <Grid item xs/>
                         <Grid item>
-                            <Tooltip title="Alerts • No alters">
+                            <Tooltip title="通知 • 暂无">
                                 <IconButton color="inherit">
                                     <NotificationsIcon/>
                                 </IconButton>
@@ -74,7 +74,7 @@ const Header: React.FunctionComponent<HeaderProps> = props => {
                                 <Avatar
                                     className={classes.avatar}
                                     src={avatar}
-                                    alt="My Avatar"
+                                    alt="我的头像"
                                 />
                             </IconButton>
                         </Grid>
@@ -92,16 +92,16 @@ const Header: React.FunctionComponent<HeaderProps> = props => {
                     <Grid container alignItems="center" spacing={1}>
                         <Grid item xs>
                             <Typography color="inherit" variant="h5" component="h1">
-                                Authentication
+                                我的订单
                             </Typography>
                         </Grid>
                         <Grid item>
                             <Button className={classes.button} variant="outlined" color="inherit" size="small">
-                                Web setup
+                                联系客服
                             </Button>
                         </Grid>
                         <Grid item>
-                            <Tooltip title="Help">
+                            <Tooltip title="帮助">
                                 <IconButton color="inherit">
                                     <HelpIcon/>
                                 </IconButton>
@@ -117,11 +117,10 @@ const Header: React.FunctionComponent<HeaderProps> = props => {
                 position="static"
                 elevation={0}
             >
-                <Tabs value={0} textColor="inherit">
-                    <Tab textColor="inherit" label="Users"/>
-                    <Tab textColor="inherit" label="Sign-in method"/>
-                    <Tab textColor="inherit" label="Templates"/>
-                    <Tab textColor="inherit" label="Usage"/>
+                <Tabs value={orderType} textColor="inherit" onChange={handleTabsChange}>
+                    <Tab textColor="inherit" label="待支付"/>
+                    <Tab textColor="inherit" label="待发货"/>
+                    <Tab textColor="inherit" label="待收货"/>
                 </Tabs>
             </AppBar>
         </React.Fragment>
@@ -129,7 +128,9 @@ const Header: React.FunctionComponent<HeaderProps> = props => {
 };
 
 interface HeaderProps extends WithStyles<typeof styles> {
-    onDrawerToggle: React.MouseEventHandler<HTMLButtonElement>,
+    onDrawerToggle: React.MouseEventHandler<HTMLButtonElement>;
+    orderType: number;
+    handleTabsChange: (event: React.ChangeEvent<{}>, orderType: number) => void;
 }
 
 export default withStyles(styles)(Header);

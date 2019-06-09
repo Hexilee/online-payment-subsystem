@@ -151,10 +151,15 @@ const styles = createStyles({
 class PaperBase extends React.Component<PaperBaseProps, PaperBaseState> {
     state = {
         mobileOpen: false,
+        orderType: 0
     };
 
     handleDrawerToggle = () => {
-        this.setState(state => ({mobileOpen: !state.mobileOpen}));
+        this.setState(state => ({...state, mobileOpen: !state.mobileOpen}));
+    };
+
+    handleTabsChange = (_: React.ChangeEvent<{}>, value: number) => {
+        this.setState(state => ({...state, orderType: value}))
     };
 
     render() {
@@ -178,7 +183,8 @@ class PaperBase extends React.Component<PaperBaseProps, PaperBaseState> {
                         </Hidden>
                     </nav>
                     <div className={classes.appContent}>
-                        <Header onDrawerToggle={this.handleDrawerToggle}/>
+                        <Header onDrawerToggle={this.handleDrawerToggle} orderType={this.state.orderType}
+                                handleTabsChange={this.handleTabsChange}/>
                         <main className={classes.mainContent}>
                             <Content/>
                         </main>
@@ -190,7 +196,14 @@ class PaperBase extends React.Component<PaperBaseProps, PaperBaseState> {
 }
 
 interface PaperBaseState {
-    mobileOpen: boolean
+    mobileOpen: boolean;
+
+    /**
+     * - 0 for 待支付
+     * - 1 for 待发货
+     * - 2 for 待收货
+     */
+    orderType: number;
 }
 
 interface PaperBaseProps extends WithStyles<typeof styles> {
