@@ -18,6 +18,7 @@ class Order(db.Model):
     buyer_id = db.Column(db.Integer, db.ForeignKey('Buyer.BuyerId'), nullable=False, name="BuyerId")
     seller_id = db.Column(db.Integer, db.ForeignKey('Seller.SellerId'), nullable=False, name="SellerId")
     good_name = db.Column(db.String(255), nullable=False, name="GoodName")
+    good_description = db.Column(db.String(1023), nullable=False, name="GoodDescription")
     order_state = db.Column(db.Integer, nullable=False, name="OrderState")
     order_time = db.Column(TIMESTAMP, nullable=False, name="OrderTime")
     pay_time = db.Column(TIMESTAMP, name="PayTime")
