@@ -15,6 +15,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "serializer.ts": "^0.0.12",
     "src": "^1.1.2"
   },
   "devDependencies": {

@@ -12,9 +12,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import moment, { Moment } from 'moment';
 import OrderPage from './OrderPage';
 
-const styles = (theme: Theme) => createStyles({
-
-});
+const styles = (theme: Theme) => createStyles({});
 
 const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
     return (
@@ -26,8 +24,19 @@ interface OrderItemProps extends WithStyles<typeof styles> {
     items: ItemData[]
 }
 
-export interface ItemData {
-
+export class ItemData {
+    orderId: number = 0;
+    orderState: number = 0;
+    goodName: string = "";
+    goodDescription: string = "";
+    sellerName: string = "";
+    buyerName: string = "";
+    orderTime: Date = new Date();
+    payTime?: Date;
+    deliverTime?: Date;
+    completeTime?: Date;
+    cancelTime?: Date;
+    amount: number = 0;
 }
 
 export default withStyles(styles)(OrderItem);
