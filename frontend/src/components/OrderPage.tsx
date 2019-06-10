@@ -44,13 +44,20 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
         this.handlePagination(0);
     }
 
+    shouldComponentUpdate = (nextProps: Readonly<OrderPageProps>, nextState: Readonly<OrderPageState>, nextContext: any) => {
+        if (nextProps !== this.props) {
+            this.handlePaginationWithProps(0, nextProps);
+        }
+        return nextState !== this.state;
+    };
+
     handleDialogClose = () => {
         this.setState(state => ({...state, error: {...state.error, display: false}}));
     };
 
-    handlePagination = (offset: number) => {
-        const {orderType, endTime, searchWords} = this.props;
-        const url = encodeURI(`${BASE_URL}/order?orderType=${orderType}&endTime=${Math.floor(endTime.valueOf()/ 1000)}&searchWords=${searchWords}&offset=${offset}&limit=${PAGE_LIMIT}`);
+    handlePaginationWithProps = (offset: number, props: Readonly<OrderPageProps>) => {
+        const {orderType, endTime, searchWords} = props;
+        const url = encodeURI(`${BASE_URL}/order?orderType=${orderType}&endTime=${Math.floor(endTime.valueOf() / 1000)}&searchWords=${searchWords}&offset=${offset}&limit=${PAGE_LIMIT}`);
         fetch(url)
             .then(resp => {
                 if (!resp.ok) {
@@ -85,6 +92,10 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
                     }))
                 }
             });
+    };
+
+    handlePagination = (offset: number) => {
+        this.handlePaginationWithProps(offset, this.props);
     };
 
     render = () => {
