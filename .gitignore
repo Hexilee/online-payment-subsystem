@@ -7,3 +7,4 @@ node_modules/
 dist/
 yarn.lock
 orders.json
+order-data.json
