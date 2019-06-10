@@ -4,14 +4,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+import { spacing } from 'material-ui/styles';
 import * as React from 'react';
 import { withStyles, WithStyles, Theme, createStyles, Typography } from '@material-ui/core';
 import moment, { Moment } from 'moment';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Pagination from 'material-ui-flat-pagination';
 import OrderItem, { ItemData } from './OrderItem';
-import { Type } from 'serializer.ts/Decorators';
 import { BASE_URL, PAGE_LIMIT } from './config';
 
 const styles = (theme: Theme) => createStyles({
@@ -22,6 +23,9 @@ const styles = (theme: Theme) => createStyles({
     grid: {
         margin: 'auto',
         width: '100%'
+    },
+    paginator: {
+        marginTop: theme.spacing(2),
     }
 });
 
@@ -110,8 +114,8 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
                     ))
                 }
                 </Grid>
-                <CssBaseline/>
                 <Pagination
+                    className={classes.paginator}
                     limit={PAGE_LIMIT}
                     offset={this.state.offset}
                     total={this.state.totalItem}
@@ -165,7 +169,6 @@ interface OrderPageState {
 class OrderPageData {
     totalItem: number = 0;
     userType: number = 0;
-    @Type(() => ItemData)
     items: ItemData[] = [];
 }
 
