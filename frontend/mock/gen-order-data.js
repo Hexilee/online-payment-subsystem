@@ -1,11 +1,12 @@
 const Mock = require('mockjs');
+const snakeize = require('snakeize');
 const Random = Mock.Random;
 const randomInt = (upto) => Math.floor(Math.random() * Math.floor(upto));
 const gen = () => {
     const items = [];
     for (let key of new Array(1000).keys()) {
         items.push({
-            OrderNo: key,
+            OrderId: key,
             OrderState: randomInt(5),
             GoodName: Random.csentence(),
             GoodDescription: Random.cparagraph(),
@@ -22,5 +23,5 @@ const gen = () => {
     return items
 };
 
-console.log(JSON.stringify(gen()));
+console.log(JSON.stringify(snakeize(gen())));
 
