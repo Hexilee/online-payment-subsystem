@@ -5,17 +5,27 @@ import session
 import time
 from flask import request
 from middleware import auth_guard
+from db import db
 
-@app.route('/api/order')
+@app.route('/api/order', methods=['GET', 'POST'])
 @auth_guard
 def get_orders():
-    state = request.args.get('state', None)
-    end_time = time.localtime(request.args.get('end', time.time()))
-    page_size = request.args.get('size', 15)
     (_, uid, typ) = session.get_user_data()
-    query = Buyer.query if typ == 1 else Seller.query
-    user = query.filter_by(username=username).first()
-    return json.dumps(Order.query.all())
+    if request.method == "GET":   
+        state = request.args.get('state', None)
+        end_time = time.localtime(request.args.get('end', time.time()))
+        page_size = request.args.get('size', 15)
+        return json.dumps(Order.query.all())
+    else:
+        if typ == 1:
+            orders_data = json.loads(request.data)
+            order_iter = filter(lambda order: order.buyer_id == uid, map(lambda order: Order(**order), orders_data))
+            orders = [order for order in order_iter]
+            db.session.add_all(orders)
+            db.session.commit()
+            return b"", 201
+            
+            
 
 @app.route('/api/mock/session', methods = ['POST'])
 def mock_login():

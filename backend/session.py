@@ -6,4 +6,4 @@ def get_user_data():
 def mock_login():
     session['username'] = 'Zhang'
     session['userid'] = 1
-    session['type'] = 1
+    session['type'] = 1 # 1 for buyer, 0 for seller

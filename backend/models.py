@@ -1,3 +1,4 @@
+import datetime
 from db import db
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 
@@ -26,3 +27,13 @@ class Order(db.Model):
     cancel_time = db.Column(TIMESTAMP, name="CancelTime")
     success_time = db.Column(TIMESTAMP, name="SuccessTime")
     amount = db.Column(db.Numeric(25, 2), nullable=False, name="Amount")
+
+    def __init__(self, **obj):
+        self.__dict__.update(obj)
+        self.order_time = try_from_timestamp(self.order_time)
+        self.pay_time = try_from_timestamp(self.pay_time)
+        self.deliver_time = try_from_timestamp(self.deliver_time)
+        self.success_time = try_from_timestamp(self.success_time)
+
+def try_from_timestamp(stamp: int):
+    return stamp if stamp is None else datetime.datetime.fromtimestamp(stamp)

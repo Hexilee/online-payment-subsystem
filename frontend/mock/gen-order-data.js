@@ -6,7 +6,6 @@ const gen = () => {
     const items = [];
     for (let key of new Array(1000).keys()) {
         items.push({
-            OrderId: key,
             OrderState: randomInt(5),
             GoodName: Random.csentence(),
             GoodDescription: Random.cparagraph(),
