@@ -73,7 +73,7 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
                 this.setState(state => ({...state, offset: offset, ...data}));
             })
             .catch(err => {
-                if (err.message === '403') {
+                if (err.message === '401') {
                     this.setState(state => ({
                         ...state, error: {
                             display: true,
