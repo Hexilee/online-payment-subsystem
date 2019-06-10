@@ -26,6 +26,7 @@ const styles = (theme: Theme) => createStyles({
         fontSize: theme.typography.fontSize,
     },
     block: {
+        marginTop: 10,
         display: 'block',
     },
     addUser: {
@@ -35,12 +36,12 @@ const styles = (theme: Theme) => createStyles({
         margin: '40px 16px',
     },
     textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: 400,
+        marginTop: 8
     },
-    gridItem: {
-        marginTop: 10
+    gridSubContainer: {
+        width: '50%',
+        minWidth: 400,
+        marginTop: 5,
     }
 });
 
@@ -62,22 +63,24 @@ const Content: React.FunctionComponent<ContentProps> = (props) => {
             <AppBar className={classes.searchBar} position="static" color="default" elevation={0}>
                 <Toolbar>
                     <Grid container spacing={2} alignItems="center">
-                        <Grid item className={classes.gridItem}>
-                            <SearchIcon className={classes.block} color="inherit"/>
+                        <Grid container spacing={2} className={classes.gridSubContainer}>
+                            <Grid item>
+                                <SearchIcon className={classes.block} color="inherit"/>
+                            </Grid>
+                            <Grid item xs>
+                                <TextField
+                                    onChange={handleSearchWords}
+                                    fullWidth
+                                    placeholder="搜索商品名或商品描述..."
+                                    className={classes.textField}
+                                    InputProps={{
+                                        disableUnderline: true,
+                                        className: classes.searchInput,
+                                    }}
+                                />
+                            </Grid>
                         </Grid>
-                        <Grid item xs className={classes.gridItem}>
-                            <TextField
-                                onChange={handleSearchWords}
-                                fullWidth
-                                placeholder="搜索商品名或商品描述..."
-                                className={classes.textField}
-                                InputProps={{
-                                    disableUnderline: true,
-                                    className: classes.searchInput,
-                                }}
-                            />
-                        </Grid>
-                        <Grid item className={classes.gridItem}>
+                        <Grid item className={classes.gridSubContainer}>
                             <TextField
                                 id="datetime-local"
                                 label="截至"
