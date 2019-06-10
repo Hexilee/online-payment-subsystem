@@ -62,7 +62,9 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
     handlePaginationWithProps = (offset: number, props: Readonly<OrderPageProps>) => {
         const {orderType, endTime, searchWords} = props;
         const url = encodeURI(`${BASE_URL}/order?orderType=${orderType}&endTime=${Math.floor(endTime.valueOf() / 1000)}&searchWords=${searchWords}&offset=${offset}&limit=${PAGE_LIMIT}`);
-        fetch(url)
+        fetch(url, {
+            credentials: 'include'
+        })
             .then(resp => {
                 if (!resp.ok) {
                     throw new Error(`${resp.status}`);
@@ -73,12 +75,13 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
                 this.setState(state => ({...state, offset: offset, ...data}));
             })
             .catch(err => {
+                console.log(err);
                 if (err.message === '401') {
                     this.setState(state => ({
                         ...state, error: {
                             display: true,
                             title: '未登陆',
-                            content: '请前往登录页面',
+                            content: '您还未登录，请前往登录页面',
                             handlePositiveAction: () => {
                                 location.replace('') // TODO: to login page
                             }

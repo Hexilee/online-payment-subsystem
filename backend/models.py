@@ -1,6 +1,6 @@
-import datetime
 from db import db
 from sqlalchemy.sql.sqltypes import TIMESTAMP
+from utils import try_from_timestamp
 
 class Buyer(db.Model):
     __tablename__ = "Buyer"
@@ -34,6 +34,4 @@ class Order(db.Model):
         self.pay_time = try_from_timestamp(self.pay_time)
         self.deliver_time = try_from_timestamp(self.deliver_time)
         self.success_time = try_from_timestamp(self.success_time)
-
-def try_from_timestamp(stamp: int):
-    return stamp if stamp is None else datetime.datetime.fromtimestamp(stamp)
+        self.cancel_time = try_from_timestamp(self.cancel_time)

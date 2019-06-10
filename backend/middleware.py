@@ -1,9 +1,8 @@
-from session import get_user_data
+from flask import session
 
 def auth_guard(handler):
     def authenticated_handler(*args, **kwargs):
-        (username, uid, typ) = get_user_data()
-        if username is None or uid is None or typ is None:
+        if session.get('username') is None or session.get('userid') is None or session.get('type') is None:
             return b"", 401
         else:
             return handler(*args, **kwargs)
