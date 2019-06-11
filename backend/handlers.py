@@ -19,7 +19,7 @@ def get_orders():
         order_type = request.args.get('orderType')
         end_time = try_from_timestamp(
             int(request.args.get('endTime', time.time())))
-        search_words = request.args.get('search_words', "")
+        search_words = request.args.get('searchWords', "")
         offset = request.args.get('offset', 0)
         limit = request.args.get('limit', 10)
         query = db.session.\
