@@ -264,7 +264,7 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
     };
 
     const highlightSearchWords = (str: string) =>
-        reactStringReplace(str, searchWords, (words, i) => (
+        searchWords === '' ? str : reactStringReplace(str, searchWords, (words, i) => (
             <span key={i} style={{
                 color: red[600],
                 fontWeight: 'bold',
