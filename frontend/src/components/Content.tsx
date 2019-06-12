@@ -20,6 +20,7 @@ import Button from '@material-ui/core/Button';
 
 const styles = (theme: Theme) => createStyles({
     paper: {
+        width: '100%',
         maxWidth: 1200,
         margin: 'auto',
         overflow: 'hidden',

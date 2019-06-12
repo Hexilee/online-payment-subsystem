@@ -100,6 +100,66 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
         });
     };
 
+    const deliver = () => {
+        const targetURL = encodeURI(`${BASE_URL}/order/${item.id}?targetState=2`);
+        fetch(targetURL, {
+            method: 'PUT',
+            credentials: 'include',
+        }).then(resp => {
+            if (!resp.ok) {
+                throw new Error(`${resp.status}`);
+            }
+            displayDialog({
+                title: '已确认发货',
+                content: `请耐心等待商品送达`,
+                handleConfirmAction: () => {
+                    hideDialog();
+                    refreshPage();
+                },
+            })
+        }).catch(err => {
+            console.log(err);
+            displayDialog({
+                title: '未知错误',
+                content: `请检查网络连接或联系系统管理员${err.toString()}`,
+                handleConfirmAction: () => {
+                    hideDialog();
+                    refreshPage();
+                }
+            });
+        });
+    };
+
+    const receive = () => {
+        const targetURL = encodeURI(`${BASE_URL}/order/${item.id}?targetState=3`);
+        fetch(targetURL, {
+            method: 'PUT',
+            credentials: 'include',
+        }).then(resp => {
+            if (!resp.ok) {
+                throw new Error(`${resp.status}`);
+            }
+            displayDialog({
+                title: '已确认收货',
+                content: `希望您购物愉快`,
+                handleConfirmAction: () => {
+                    hideDialog();
+                    refreshPage();
+                },
+            })
+        }).catch(err => {
+            console.log(err);
+            displayDialog({
+                title: '未知错误',
+                content: `请检查网络连接或联系系统管理员${err.toString()}`,
+                handleConfirmAction: () => {
+                    hideDialog();
+                    refreshPage();
+                }
+            });
+        });
+    };
+
     const cancel = () => {
         const targetURL = encodeURI(`${BASE_URL}/order/${item.id}?targetState=4`);
         fetch(targetURL, {
@@ -141,7 +201,7 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
         });
     };
     const positiveButton = () => {
-        if (userType === 1 && item.orderState == 0) {
+        if (userType === 1 && item.orderState === 0) {
             return (<Button color="primary" onClick={() => {
                 displayDialog({
                     title: '您确定要付款吗？',
@@ -152,9 +212,34 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
                 付款
             </Button>)
         }
+
+        if (userType === 0 && item.orderState === 1) {
+            return (<Button color="primary" onClick={() => {
+                displayDialog({
+                    title: '您确定已发货吗？',
+                    content: `买家将看到商品状态变化`,
+                    handleConfirmAction: deliver,
+                })
+            }}>
+                确认发货
+            </Button>)
+        }
+
+        if (userType === 1 && item.orderState === 2) {
+            return (<Button color="primary" onClick={() => {
+                displayDialog({
+                    title: '您确定已收货吗？',
+                    content: `一经确认，该订单将被视为已完成`,
+                    handleConfirmAction: receive,
+                })
+            }}>
+                确认收货
+            </Button>)
+        }
+        return;
     };
     const negativeButton = () => {
-        if (userType === 1 && item.orderState == 0) {
+        if (item.orderState === 0) {
             return (<Button color="primary" onClick={() => {
                 displayDialog({
                     title: '您确定要取消吗？',
@@ -164,7 +249,18 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
             }}>
                 取消订单
             </Button>)
+        } else if (item.orderState === 1 || item.orderState === 2 || item.orderState === 3) {
+            return (<Button color="primary" onClick={() => {
+                displayDialog({
+                    title: '您确定要退款吗？',
+                    content: `请双方事先沟通好；支付金额￥${item.amount}将会退还到买家的账户余额中`,
+                    handleConfirmAction: cancel,
+                })
+            }}>
+                退款
+            </Button>)
         }
+        return;
     };
 
     const highlightSearchWords = (str: string) =>
