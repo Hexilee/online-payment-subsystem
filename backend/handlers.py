@@ -9,11 +9,12 @@ from middleware import auth_guard
 from db import db
 from utils import try_from_timestamp, try_into_timestamp
 from typing import List, Tuple
+from session import get_user_data
 
 
 @app.route('/api/order', methods=['GET', 'POST'])
 @auth_guard
-def get_orders():
+def handle_orders():
     (_, uid, typ) = session.get_user_data()
     if request.method == "GET":
         order_type = request.args.get('orderType')
@@ -70,6 +71,69 @@ def get_orders():
             db.session.add_all(orders)
             db.session.commit()
             return b"", 201
+
+
+@app.route('/api/order/<order_id>', methods=['PUT'])
+@auth_guard
+def update_order_state(order_id: int):
+    order: Order = Order.query.filter_by(order_id=order_id).first()
+    if order is None:
+        return b'', 404
+    target_state = request.args.get('targetState')
+    if target_state is None:
+        return b'', 400
+
+    (_, uid, typ) = get_user_data()
+    if target_state == 4 and (
+            typ == 1 and order.buyer_id == uid or
+            typ == 0 and order.seller_id == uid):  # 取消
+        if order.order_state > 0 and order.order_state < 4:  # 退款
+            buyer: Buyer = Buyer.query.filter_by(
+                buyer_id=order.buyer_id).first()
+            seller: Seller = Seller.query.filter_by(
+                seller_id=order.seller_id).first()
+            if seller is None or buyer is None:
+                return b'', 409  # conflict
+            buyer.balance = buyer.balance + order.amount
+            seller.balance = seller.balance - order.amount
+            db.session.add(buyer)
+            db.session.add(seller)
+        order.order_state = 4
+        db.session.add(order)
+        db.session.commit()
+        return b'', 200
+
+    if order.order_state == 0 and target_state == 1:
+        if typ == 1 and order.buyer_id == uid:  # 付款
+            order.order_state = 1
+            buyer: Buyer = Buyer.query.filter_by(buyer_id=uid).first()
+            seller: Seller = Seller.query.filter_by(
+                seller_id=order.seller_id).first()
+            if seller is None:
+                return b'', 409  # conflict
+            buyer.balance = buyer.balance - order.amount
+            if buyer.balance < 0:
+                return b'', 402  # payment required
+            seller.balance = seller.balance + order.amount
+            db.session.add(order)
+            db.session.add(buyer)
+            db.session.add(seller)
+            db.session.commit()
+            return b'', 200
+
+    if order.order_state == 1 and target_state == 2:
+        if typ == 0 and seller.seller_id == uid:  # 发货
+            order.order_state = 2
+            db.session.add(order)
+            db.session.commit()
+
+    if order.order_state == 2 and target_state == 3:
+        if typ == 1 and order.buyer_id == uid:  # 确认收货
+            order.order_state = 3
+            db.session.add(order)
+            db.session.commit()
+
+    return b'', 403  # 其它情况，Forbidden
 
 
 @app.route('/api/mock/session', methods=['POST'])
