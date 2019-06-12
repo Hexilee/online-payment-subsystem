@@ -27,6 +27,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { BASE_URL } from '../config';
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -58,7 +59,104 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
-    const {classes, item} = props;
+    const {classes, item, userType, displayDialog, hideDialog} = props;
+    const pay = () => {
+        const targetURL = encodeURI(`${BASE_URL}/order/${item.id}?targetState=1`);
+        fetch(targetURL, {
+            method: 'PUT',
+            credentials: 'include',
+        }).then(resp => {
+            if (!resp.ok) {
+                throw new Error(`${resp.status}`);
+            }
+            displayDialog({
+                title: '付款成功！',
+                content: `您已支付￥${item.amount}`,
+                handleConfirmAction: hideDialog,
+            })
+        }).catch(err => {
+            console.log(err);
+            if (err.message === '402') {
+                displayDialog({
+                    title: '余额不足',
+                    content: '您的账户余额不足，请前去充值',
+                    handleConfirmAction: () => {
+                        location.replace('') // TODO: to top up
+                    }
+                });
+            } else if (err.message === '409') {
+                displayDialog({
+                    title: '卖家账户已注销',
+                    content: '请取消订单',
+                    handleConfirmAction: cancel
+                });
+            } else {
+                displayDialog({
+                    title: '未知错误',
+                    content: `请检查网络连接或联系系统管理员${err.toString()}`,
+                    handleConfirmAction: hideDialog
+                });
+            }
+        });
+    };
+
+    const cancel = () => {
+        const targetURL = encodeURI(`${BASE_URL}/order/${item.id}?targetState=4`);
+        fetch(targetURL, {
+            method: 'PUT',
+            credentials: 'include',
+        }).then(resp => {
+            if (!resp.ok) {
+                throw new Error(`${resp.status}`);
+            }
+            displayDialog({
+                title: '订单已取消',
+                content: `若此订单已支付，支付金额￥${item.amount}将会退还到买家的账户余额中`,
+                handleConfirmAction: hideDialog,
+            })
+        }).catch(err => {
+            console.log(err);
+            if (err.message === '409') {
+                displayDialog({
+                    title: '卖家或卖家账户已注销',
+                    content: '请联系管理员退款',
+                    handleConfirmAction: hideDialog,
+                });
+            } else {
+                displayDialog({
+                    title: '未知错误',
+                    content: `请检查网络连接或联系系统管理员${err.toString()}`,
+                    handleConfirmAction: hideDialog
+                });
+            }
+        });
+    };
+    const positiveButton = () => {
+        if (userType === 1 && item.orderState == 0) {
+            return (<Button color="primary" onClick={() => {
+                displayDialog({
+                    title: '您确定要付款吗？',
+                    content: `您需要支付￥${item.amount}`,
+                    handleConfirmAction: pay,
+                })
+            }}>
+                付款
+            </Button>)
+        }
+    };
+    const negativeButton = () => {
+        if (userType === 1 && item.orderState == 0) {
+            return (<Button color="primary" onClick={() => {
+                displayDialog({
+                    title: '您确定要取消吗？',
+                    content: '该订单当前未支付，可随意取消',
+                    handleConfirmAction: cancel,
+                })
+            }}>
+                取消订单
+            </Button>)
+        }
+    };
 
     return (
         <Card>
@@ -77,12 +175,8 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
-                <Button color="primary">
-                    支付
-                </Button>
-                <Button color="primary">
-                    取消
-                </Button>
+                {positiveButton()}
+                {negativeButton()}
                 <Typography className={classes.price}>
                     ￥{item.amount}
                 </Typography>
@@ -124,8 +218,17 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
     );
 };
 
+interface DialogData {
+    title: string;
+    content: string;
+    handleConfirmAction: () => void
+}
+
 interface OrderItemProps extends WithStyles<typeof styles> {
+    userType: number;
     item: ItemData;
+    hideDialog: () => void;
+    displayDialog: (data: DialogData) => void;
 }
 
 export class ItemData {

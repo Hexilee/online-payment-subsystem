@@ -13,7 +13,7 @@ import moment, { Moment } from 'moment';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Pagination from 'material-ui-flat-pagination';
 import OrderItem, { ItemData } from './OrderItem';
-import { BASE_URL, PAGE_LIMIT } from './config';
+import { BASE_URL, PAGE_LIMIT } from '../config';
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -109,7 +109,8 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
                 <Grid container spacing={2}>{
                     this.state.items.map(item => (
                         <Grid item key={item.id} className={classes.grid}>
-                            <OrderItem item={item}/>
+                            <OrderItem item={item} hideDialog={this.hideDialog} displayDialog={this.displayDialog}
+                                       userType={this.state.userType}/>
                         </Grid>
                     ))
                 }

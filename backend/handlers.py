@@ -3,6 +3,7 @@ from models import *
 import json
 import session
 import time
+import datetime
 from flask import request
 from sqlalchemy import or_
 from middleware import auth_guard
@@ -80,7 +81,9 @@ def update_order_state(order_id: int):
     if order is None:
         return b'', 404
     target_state = request.args.get('targetState')
-    if target_state is None:
+    try:
+        target_state = int(target_state)
+    except Exception:
         return b'', 400
 
     (_, uid, typ) = get_user_data()
@@ -99,39 +102,42 @@ def update_order_state(order_id: int):
             db.session.add(buyer)
             db.session.add(seller)
         order.order_state = 4
+        order.cancel_time = datetime.datetime.now()
         db.session.add(order)
         db.session.commit()
         return b'', 200
 
-    if order.order_state == 0 and target_state == 1:
-        if typ == 1 and order.buyer_id == uid:  # 付款
-            order.order_state = 1
-            buyer: Buyer = Buyer.query.filter_by(buyer_id=uid).first()
-            seller: Seller = Seller.query.filter_by(
-                seller_id=order.seller_id).first()
-            if seller is None:
-                return b'', 409  # conflict
-            buyer.balance = buyer.balance - order.amount
-            if buyer.balance < 0:
-                return b'', 402  # payment required
-            seller.balance = seller.balance + order.amount
-            db.session.add(order)
-            db.session.add(buyer)
-            db.session.add(seller)
-            db.session.commit()
-            return b'', 200
+    if order.order_state == 0 and target_state == 1 and typ == 1 and order.buyer_id == uid:  # 付款
+        buyer: Buyer = Buyer.query.filter_by(buyer_id=uid).first()
+        seller: Seller = Seller.query.filter_by(
+            seller_id=order.seller_id).first()
+        if seller is None:
+            return b'', 409  # conflict
+        if buyer.balance < order.amount:
+            return b'', 402  # payment required
+        order.order_state = 1
+        order.pay_time = datetime.datetime.now()
+        buyer.balance = buyer.balance - order.amount
+        seller.balance = seller.balance + order.amount
+        db.session.add(order)
+        db.session.add(buyer)
+        db.session.add(seller)
+        db.session.commit()
+        return b'', 200
 
-    if order.order_state == 1 and target_state == 2:
-        if typ == 0 and seller.seller_id == uid:  # 发货
-            order.order_state = 2
-            db.session.add(order)
-            db.session.commit()
+    if order.order_state == 1 and target_state == 2 and typ == 0 and seller.seller_id == uid:  # 发货
+        order.order_state = 2
+        order.deliver_time = datetime.datetime.now()
+        db.session.add(order)
+        db.session.commit()
+        return b'', 200
 
-    if order.order_state == 2 and target_state == 3:
-        if typ == 1 and order.buyer_id == uid:  # 确认收货
-            order.order_state = 3
-            db.session.add(order)
-            db.session.commit()
+    if order.order_state == 2 and target_state == 3 and typ == 1 and order.buyer_id == uid:  # 确认收货
+        order.order_state = 3
+        order.success_time = datetime.datetime.now()
+        db.session.add(order)
+        db.session.commit()
+        return b'', 200
 
     return b'', 403  # 其它情况，Forbidden
 
