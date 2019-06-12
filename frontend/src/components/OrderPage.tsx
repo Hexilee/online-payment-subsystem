@@ -151,6 +151,7 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
 interface OrderPageProps extends WithStyles<typeof styles> {
     orderType: number;
     searchWords: string;
+    orderBy: string;
 }
 
 interface OrderPageState {
