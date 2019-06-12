@@ -37,11 +37,11 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
             totalItem: 0,
             userType: 0,
             items: [],
-            error: {
-                display: false,
+            dialogDisplay: false,
+            dialog: {
                 title: '',
                 content: '',
-                handlePositiveAction: () => {
+                handleConfirmAction: () => {
                 },
             },
         };
@@ -55,8 +55,12 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
         return nextState !== this.state;
     };
 
-    handleDialogClose = () => {
-        this.setState(state => ({...state, error: {...state.error, display: false}}));
+    hideDialog = () => {
+        this.setState(state => ({...state, dialogDisplay: false}));
+    };
+
+    displayDialog = (data: DialogData) => {
+        this.setState(state => ({...state, dialogDisplay: true, dialog: data}))
     };
 
     handlePaginationWithProps = (offset: number, props: Readonly<OrderPageProps>) => {
@@ -77,26 +81,19 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
             .catch(err => {
                 console.log(err);
                 if (err.message === '401') {
-                    this.setState(state => ({
-                        ...state, error: {
-                            display: true,
-                            title: '未登陆',
-                            content: '您还未登录，请前往登录页面',
-                            handlePositiveAction: () => {
-                                location.replace('') // TODO: to login page
-                            }
+                    this.displayDialog({
+                        title: '未登陆',
+                        content: '您还未登录，请前往登录页面',
+                        handleConfirmAction: () => {
+                            location.replace('') // TODO: to login page
                         }
-                    }))
+                    });
                 } else {
-                    this.setState(state => ({
-                        ...state, error: {
-                            display: true,
-                            title: '未知错误',
-                            content: `请检查网络连接或联系系统管理员${err.toString()}`,
-                            handlePositiveAction: () => {
-                            }
-                        }
-                    }))
+                    this.displayDialog({
+                        title: '未知错误',
+                        content: `请检查网络连接或联系系统管理员${err.toString()}`,
+                        handleConfirmAction: this.hideDialog
+                    });
                 }
             });
     };
@@ -125,22 +122,22 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
                     onClick={(e, offset) => this.handlePagination(offset)}
                 />
                 <Dialog
-                    open={this.state.error.display}
-                    onClose={this.handleDialogClose}
+                    open={this.state.dialogDisplay}
+                    onClose={this.hideDialog}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{this.state.error.title}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{this.state.dialog.title}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            {this.state.error.content}
+                            {this.state.dialog.content}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleDialogClose} color="primary">
+                        <Button onClick={this.hideDialog} color="primary">
                             关闭
                         </Button>
-                        <Button onClick={this.state.error.handlePositiveAction} color="primary" autoFocus>
+                        <Button onClick={this.state.dialog.handleConfirmAction} color="primary" autoFocus>
                             确认
                         </Button>
                     </DialogActions>
@@ -161,12 +158,14 @@ interface OrderPageState {
     totalItem: number;
     userType: number;
     items: ItemData[];
-    error: {
-        display: boolean;
-        title: string;
-        content: string;
-        handlePositiveAction: () => void
-    };
+    dialogDisplay: boolean;
+    dialog: DialogData;
+}
+
+interface DialogData {
+    title: string;
+    content: string;
+    handleConfirmAction: () => void
 }
 
 class OrderPageData {
