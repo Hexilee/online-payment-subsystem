@@ -64,8 +64,8 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
     };
 
     handlePaginationWithProps = (offset: number, props: Readonly<OrderPageProps>) => {
-        const {orderType, searchWords} = props;
-        const url = encodeURI(`${BASE_URL}/order?orderType=${orderType}&searchWords=${searchWords}&offset=${offset}&limit=${PAGE_LIMIT}`);
+        const {orderType, searchWords, orderBy} = props;
+        const url = encodeURI(`${BASE_URL}/order?orderType=${orderType}&searchWords=${searchWords}&offset=${offset}&limit=${PAGE_LIMIT}&orderBy=${orderBy}`);
         fetch(url, {
             credentials: 'include'
         })

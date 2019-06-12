@@ -19,7 +19,8 @@ def handle_orders():
     (_, uid, typ) = session.get_user_data()
     if request.method == "GET":
         order_type = request.args.get('orderType')
-        search_words = request.args.get('searchWords', "")
+        search_words = request.args.get('searchWords', '')
+        order_by = request.args.get('orderBy', 'order_time')
         offset = request.args.get('offset', 0)
         limit = request.args.get('limit', 10)
         query = db.session.\
@@ -38,8 +39,9 @@ def handle_orders():
                 Order.good_description.like('%%%s%%' % search_words),
             ))
         count = query.count()
+        if order_by == 'order_time' or order_by == 'pay_time' or order_by == 'deliver_time' or order_by == 'success_time' or order_by == 'cancel_time':
+            query = query.order_by(Order.__dict__[order_by].desc())
         query = query.\
-            order_by(Order.order_time.desc()).\
             offset(offset).\
             limit(limit)
         records: Tuple[List[Order], str, str] = query.all()
