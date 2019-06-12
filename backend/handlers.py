@@ -41,8 +41,10 @@ def handle_orders():
                 Order.good_description.like('%%%s%%' % search_words),
             ))
         count = query.count()
-        query = query
-        query = query.offset(offset).limit(limit)
+        query = query.\
+            order_by(Order.order_time.desc()).\
+            offset(offset).\
+            limit(limit)
         records: Tuple[List[Order], str, str] = query.all()
 
         return json.dumps({
