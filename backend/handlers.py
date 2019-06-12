@@ -19,8 +19,6 @@ def handle_orders():
     (_, uid, typ) = session.get_user_data()
     if request.method == "GET":
         order_type = request.args.get('orderType')
-        end_time = try_from_timestamp(
-            int(request.args.get('endTime', time.time())))
         search_words = request.args.get('searchWords', "")
         offset = request.args.get('offset', 0)
         limit = request.args.get('limit', 10)
@@ -34,7 +32,6 @@ def handle_orders():
             query = query.filter(Order.buyer_id == uid)
         if order_type != None:
             query = query.filter(Order.order_state == order_type)
-        query = query.filter(Order.order_time <= end_time)
         if search_words != "":
             query = query.filter(or_(
                 Order.good_name.like('%%%s%%' % search_words),

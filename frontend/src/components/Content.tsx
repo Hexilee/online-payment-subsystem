@@ -47,13 +47,7 @@ const styles = (theme: Theme) => createStyles({
 
 const Content: React.FunctionComponent<ContentProps> = (props) => {
     const {classes, orderType} = props;
-    const [selectedDate, setSelectedDate] = React.useState<Moment>(moment());
     const [searchWords, setSearchWords] = React.useState<string>('');
-
-    const handleDateChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setSelectedDate(moment(event.target.value, 'YYYY/MM/DD, HH:MM'));
-    };
-
     const handleSearchWords = (event: ChangeEvent<HTMLInputElement>) => {
         setSearchWords(event.target.value);
     };
@@ -80,24 +74,11 @@ const Content: React.FunctionComponent<ContentProps> = (props) => {
                                 />
                             </Grid>
                         </Grid>
-                        <Grid item className={classes.gridSubContainer}>
-                            <TextField
-                                id="datetime-local"
-                                label="截至"
-                                type="datetime-local"
-                                defaultValue={moment().format('YYYY-MM-DDTHH:MM')}
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                onChange={handleDateChange}
-                            />
-                        </Grid>
                     </Grid>
                 </Toolbar>
             </AppBar>
             <div className={classes.contentWrapper}>
-                <OrderPage orderType={orderType} endTime={selectedDate} searchWords={searchWords}/>
+                <OrderPage orderType={orderType} searchWords={searchWords}/>
             </div>
         </Paper>
     );
