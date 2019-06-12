@@ -53,7 +53,7 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
-    const {classes, item, userType, displayDialog, hideDialog, searchWords} = props;
+    const {classes, item, userType, displayDialog, hideDialog, searchWords, refreshPage} = props;
     const pay = () => {
         const targetURL = encodeURI(`${BASE_URL}/order/${item.id}?targetState=1`);
         fetch(targetURL, {
@@ -66,7 +66,10 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
             displayDialog({
                 title: '付款成功！',
                 content: `您已支付￥${item.amount}`,
-                handleConfirmAction: hideDialog,
+                handleConfirmAction: () => {
+                    hideDialog();
+                    refreshPage();
+                },
             })
         }).catch(err => {
             console.log(err);
@@ -88,7 +91,10 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
                 displayDialog({
                     title: '未知错误',
                     content: `请检查网络连接或联系系统管理员${err.toString()}`,
-                    handleConfirmAction: hideDialog
+                    handleConfirmAction: () => {
+                        hideDialog();
+                        refreshPage();
+                    }
                 });
             }
         });
@@ -106,7 +112,10 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
             displayDialog({
                 title: '订单已取消',
                 content: `若此订单已支付，支付金额￥${item.amount}将会退还到买家的账户余额中`,
-                handleConfirmAction: hideDialog,
+                handleConfirmAction: () => {
+                    hideDialog();
+                    refreshPage();
+                },
             })
         }).catch(err => {
             console.log(err);
@@ -114,13 +123,19 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
                 displayDialog({
                     title: '卖家或卖家账户已注销',
                     content: '请联系管理员退款',
-                    handleConfirmAction: hideDialog,
+                    handleConfirmAction: () => {
+                        hideDialog();
+                        refreshPage();
+                    },
                 });
             } else {
                 displayDialog({
                     title: '未知错误',
                     content: `请检查网络连接或联系系统管理员${err.toString()}`,
-                    handleConfirmAction: hideDialog
+                    handleConfirmAction: () => {
+                        hideDialog();
+                        refreshPage();
+                    },
                 });
             }
         });
@@ -229,6 +244,7 @@ interface OrderItemProps extends WithStyles<typeof styles> {
     userType: number;
     item: ItemData;
     searchWords: string;
+    refreshPage: () => void;
     hideDialog: () => void;
     displayDialog: (data: DialogData) => void;
 }

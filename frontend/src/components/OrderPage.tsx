@@ -110,7 +110,8 @@ class OrderPage extends React.Component<OrderPageProps, OrderPageState> {
                     this.state.items.map(item => (
                         <Grid item key={item.id} className={classes.grid}>
                             <OrderItem item={item} hideDialog={this.hideDialog} displayDialog={this.displayDialog}
-                                       userType={this.state.userType} searchWords={this.props.searchWords}/>
+                                       userType={this.state.userType} searchWords={this.props.searchWords}
+                                       refreshPage={this.props.refreshPage}/>
                         </Grid>
                     ))
                 }
@@ -152,6 +153,7 @@ interface OrderPageProps extends WithStyles<typeof styles> {
     orderType: number;
     searchWords: string;
     orderBy: string;
+    refreshPage: () => void;
 }
 
 interface OrderPageState {

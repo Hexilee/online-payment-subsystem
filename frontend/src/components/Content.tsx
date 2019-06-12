@@ -100,7 +100,7 @@ const Content: React.FunctionComponent<ContentProps> = (props) => {
                                 </Select>
                             </FormControl>
                             <Tooltip title="刷新">
-                                <IconButton onClick={() => {refresh({})}}>
+                                <IconButton onClick={() => refresh({})}>
                                     <RefreshIcon className={classes.block} color="inherit"/>
                                 </IconButton>
                             </Tooltip>
@@ -109,7 +109,7 @@ const Content: React.FunctionComponent<ContentProps> = (props) => {
                 </Toolbar>
             </AppBar>
             <div className={classes.contentWrapper}>
-                <OrderPage orderType={orderType} searchWords={searchWords} orderBy={orderBy}/>
+                <OrderPage orderType={orderType} searchWords={searchWords} orderBy={orderBy} refreshPage={() => refresh({})}/>
             </div>
         </Paper>
     );
