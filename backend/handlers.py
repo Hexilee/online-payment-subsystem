@@ -58,7 +58,7 @@ def handle_orders():
                 'buyerName': buyer_name,
                 'orderTime': try_into_timestamp(order.order_time),
                 'payTime': try_into_timestamp(order.pay_time),
-                'deliverTime': try_into_timestamp(order.pay_time),
+                'deliverTime': try_into_timestamp(order.deliver_time),
                 'completeTime': try_into_timestamp(order.success_time),
                 'cancelTime': try_into_timestamp(order.cancel_time),
                 'amount': float(order.amount),
