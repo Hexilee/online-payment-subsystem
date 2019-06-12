@@ -167,7 +167,7 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
                     </Avatar>
                 }
                 title={item.goodName}
-                subheader={`下单时间：${moment(item.orderTime * 1000).format('YYYY/MM/DD HH:MM:SS')}`}
+                subheader={`下单时间：${moment(item.orderTime * 1000).format('YYYY/MM/DD HH:mm:ss')}`}
             />
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
@@ -281,7 +281,7 @@ const displayAttr = (item: ItemData, attr: string): string => {
         case 'cancelTime': {
             const time = item[attr];
             if (time !== null) {
-                return moment(time * 1000).format('YYYY/MM/DD HH:MM:SS');
+                return moment(time * 1000).format('YYYY/MM/DD HH:mm:ss');
             }
             // fallthrough
         }
