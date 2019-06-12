@@ -1,12 +1,10 @@
 import { blue, cyan, green, grey, yellow } from '@material-ui/core/colors';
-import Tooltip from '@material-ui/core/Tooltip';
-import { black } from 'material-ui/styles/colors';
+import { red400 } from 'material-ui/styles/colors';
 import * as React from 'react';
 import { withStyles, WithStyles, Theme, createStyles, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
@@ -14,20 +12,16 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import Icon from '@material-ui/icons/'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { BASE_URL } from '../config';
+import reactStringReplace from 'react-string-replace';
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -59,7 +53,7 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
-    const {classes, item, userType, displayDialog, hideDialog} = props;
+    const {classes, item, userType, displayDialog, hideDialog, searchWords} = props;
     const pay = () => {
         const targetURL = encodeURI(`${BASE_URL}/order/${item.id}?targetState=1`);
         fetch(targetURL, {
@@ -158,6 +152,13 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
         }
     };
 
+    const highlightSearchWords = (str: string) =>
+        reactStringReplace(str, searchWords, (words, i) => (
+            <span key={i} style={{
+                color: red[600],
+                fontWeight: 'bold',
+            }}>{words}</span>));
+
     return (
         <Card>
             <CardHeader
@@ -166,12 +167,12 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
                         {item.goodName[0]}
                     </Avatar>
                 }
-                title={item.goodName}
+                title={<Typography>{highlightSearchWords(item.goodName)}</Typography>}
                 subheader={`下单时间：${moment(item.orderTime * 1000).format('YYYY/MM/DD HH:mm:ss')}`}
             />
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    {item.goodDescription}
+                    {highlightSearchWords(item.goodDescription)}
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
@@ -227,6 +228,7 @@ interface DialogData {
 interface OrderItemProps extends WithStyles<typeof styles> {
     userType: number;
     item: ItemData;
+    searchWords: string;
     hideDialog: () => void;
     displayDialog: (data: DialogData) => void;
 }

@@ -17,6 +17,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-string-replace": "^0.4.4",
     "snakeize": "^0.1.0",
     "src": "^1.1.2"
   },
