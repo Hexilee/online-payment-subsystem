@@ -1,5 +1,5 @@
-from app import app
-from models import *
+from .app import app
+from .models import *
 import json
 import session
 import time
@@ -7,8 +7,8 @@ import datetime
 from flask import request
 from sqlalchemy import or_
 from middleware import auth_guard
-from db import db
-from utils import try_from_timestamp, try_into_timestamp
+from .db import db
+from .utils import try_from_timestamp, try_into_timestamp
 from typing import List, Tuple
 from session import get_user_data
 
