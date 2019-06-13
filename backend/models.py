@@ -1,6 +1,6 @@
-from .db import db
+from db import db
 from sqlalchemy.sql.sqltypes import TIMESTAMP
-from .utils import try_from_timestamp
+from utils import try_from_timestamp
 
 
 class Buyer(db.Model):
