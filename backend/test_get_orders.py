@@ -3,6 +3,7 @@ import os
 import tempfile
 from app import app
 from db import db
+from models import *
 import handlers
 
 
@@ -28,6 +29,11 @@ class AppClass(unittest.TestCase):
         self.client = app.test_client()
         with app.app_context():
             db.create_all()
+            self.seller = Seller(username='XIXI', balance=100000)
+            self.buyer = Buyer(username='HEX', balance=100000)
+            db.session.add(self.seller)
+            db.session.add(self.buyer)
+            db.commit()
 
     # clean up logic
     # code that is executed after each test

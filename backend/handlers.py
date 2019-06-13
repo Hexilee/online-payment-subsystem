@@ -6,7 +6,7 @@ import time
 import datetime
 from flask import request
 from sqlalchemy import or_
-from middleware import auth_guard
+from middleware import auth_guard, flask_env_guard
 from db import db
 from utils import try_from_timestamp, try_into_timestamp
 from typing import List, Tuple
@@ -144,6 +144,10 @@ def update_order_state(order_id: int):
 
 
 @app.route('/api/mock/session', methods=['POST'])
+@flask_env_guard(['test', 'dev'])
 def mock_login():
-    session.mock_login()
-    return b"", 201
+    try:
+        session.mock_login()
+        return b"", 201
+    except Exception:
+        return b"", 400

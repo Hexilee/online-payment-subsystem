@@ -4,3 +4,4 @@ DB_NAME = "OnlinePayment"
 DB_USERNAME = ""
 DB_PASSWD = ""
 SESSION_SECRET_KEY = ""
+FLASK_ENV = 'dev' # 'prod' | 'dev' | 'test' 
