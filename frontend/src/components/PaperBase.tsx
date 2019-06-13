@@ -27,9 +27,6 @@ let theme = createMuiTheme({
             dark: '#006db3',
         },
     },
-    shape: {
-        borderRadius: 8,
-    },
 });
 
 theme = {
