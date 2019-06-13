@@ -10,7 +10,6 @@ from middleware import auth_guard, flask_env_guard
 from db import db
 from utils import try_from_timestamp, try_into_timestamp
 from typing import List, Tuple
-from session import get_user_data
 
 
 @app.route('/api/order', methods=['GET', 'POST'])
@@ -151,3 +150,14 @@ def mock_login():
         return b"", 201
     except Exception:
         return b"", 400
+
+@app.route('/api/userInfo', methods=['GET'])
+@auth_guard
+def get_user_data():
+    [username, userid, typ] = session.get_user_data()
+    return json.dumps({
+        'username': username,
+        'userid': userid,
+        'typ': typ,
+    })
+
