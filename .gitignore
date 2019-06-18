@@ -9,3 +9,4 @@ yarn.lock
 orders.json
 order-data.json
 *.pyc
+static

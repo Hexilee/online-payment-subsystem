@@ -4,12 +4,13 @@ import json
 import session
 import time
 import datetime
-from flask import request
+from flask import request, send_from_directory
 from sqlalchemy import or_
 from middleware import auth_guard, flask_env_guard
 from db import db
 from utils import try_from_timestamp, try_into_timestamp
 from typing import List, Tuple
+from config import *
 
 
 @app.route('/api/order', methods=['GET', 'POST'])
@@ -161,3 +162,6 @@ def get_user_data():
         'typ': typ,
     })
 
+@app.route('/<file>')
+def send_static(file):
+    return send_from_directory(STATIC_DIRECTORY, file)
