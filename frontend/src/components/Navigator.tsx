@@ -1,6 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { withStyles, WithStyles, Theme, createStyles } from '@material-ui/core';
+import { withStyles, WithStyles, Theme, createStyles, Link } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import Drawer, { DrawerProps } from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -15,23 +15,24 @@ import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
 import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
+import * as config from '../config';
 
 const categories = [
     {
         id: '控制台',
         children: [
-            {id: '账号管理', icon: <PeopleIcon/>},
-            {id: '我的订单', icon: <DnsRoundedIcon/>, active: true},
-            {id: '在线预订', icon: <PublicIcon/>},
-            {id: '对账与审核', icon: <SettingsEthernetIcon/>},
+            { id: '账号管理', icon: <PeopleIcon />, href: config.USER_SETTING_URL },
+            { id: '我的订单', icon: <DnsRoundedIcon />, active: true, href: '#' },
+            { id: '在线预订', icon: <PublicIcon />, href: config.ONLINE_ORDER_URL },
+            { id: '对账与审核', icon: <SettingsEthernetIcon />, href: config.ORDER_INSPECT_URL },
         ],
     },
     {
         id: '系统',
         children: [
-            {id: '系统设置', icon: <SettingsIcon/>},
-            {id: '通知管理', icon: <TimerIcon/>},
-            {id: '关于', icon: <PhonelinkSetupIcon/>},
+            { id: '系统设置', icon: <SettingsIcon /> },
+            { id: '通知管理', icon: <TimerIcon /> },
+            { id: '关于', icon: <PhonelinkSetupIcon /> },
         ],
     },
 ];
@@ -78,26 +79,28 @@ const styles = (theme: Theme) => createStyles({
 });
 
 const Navigator: React.FunctionComponent<NavigatorProps> = (props) => {
-    const {classes, ...other} = props;
+    const { classes, ...other } = props;
     return (
         <Drawer variant="permanent" {...other}>
             <List disablePadding>
                 <ListItem className={clsx(classes.firebase, classes.item, classes.itemCategory)}>
                     在线支付系统
                 </ListItem>
-                <ListItem className={clsx(classes.item, classes.itemCategory)}>
-                    <ListItemIcon className={classes.itemIcon}>
-                        <HomeIcon/>
-                    </ListItemIcon>
-                    <ListItemText
-                        classes={{
-                            primary: classes.itemPrimary,
-                        }}
-                    >
-                        主页
+                <Link href={config.HOME_URL} target='_blank' underline='none'>
+                    <ListItem className={clsx(classes.item, classes.itemCategory)}>
+                        <ListItemIcon className={classes.itemIcon}>
+                            <HomeIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                            classes={{
+                                primary: classes.itemPrimary,
+                            }}
+                        >
+                            主页
                     </ListItemText>
-                </ListItem>
-                {categories.map(({id, children}) => (
+                    </ListItem>
+                </Link>
+                {categories.map(({ id, children }) => (
                     <React.Fragment key={id}>
                         <ListItem className={classes.categoryHeader}>
                             <ListItemText
@@ -108,23 +111,25 @@ const Navigator: React.FunctionComponent<NavigatorProps> = (props) => {
                                 {id}
                             </ListItemText>
                         </ListItem>
-                        {children.map(({id: childId, icon, active}) => (
-                            <ListItem
-                                key={childId}
-                                button
-                                className={clsx(classes.item, active && classes.itemActiveItem)}
-                            >
-                                <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
-                                <ListItemText
-                                    classes={{
-                                        primary: classes.itemPrimary,
-                                    }}
+                        {children.map(({ id: childId, icon, active, href }) => (
+                            <Link href={href} target='_blank' underline='none'>
+                                <ListItem
+                                    key={childId}
+                                    button
+                                    className={clsx(classes.item, active && classes.itemActiveItem)}
                                 >
-                                    {childId}
-                                </ListItemText>
-                            </ListItem>
+                                    <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
+                                    <ListItemText
+                                        classes={{
+                                            primary: classes.itemPrimary,
+                                        }}
+                                    >
+                                        {childId}
+                                    </ListItemText>
+                                </ListItem>
+                            </Link>
                         ))}
-                        <Divider className={classes.divider}/>
+                        <Divider className={classes.divider} />
                     </React.Fragment>
                 ))}
             </List>
