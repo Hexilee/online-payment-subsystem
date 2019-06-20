@@ -126,7 +126,7 @@ def update_order_state(order_id: int):
         db.session.commit()
         return b'', 200
 
-    if order.order_state == 1 and target_state == 2 and typ == 0 and seller.seller_id == uid:  # 发货
+    if order.order_state == 1 and target_state == 2 and typ == 0 and order.seller_id == uid:  # 发货
         order.order_state = 2
         order.deliver_time = datetime.datetime.now()
         db.session.add(order)
