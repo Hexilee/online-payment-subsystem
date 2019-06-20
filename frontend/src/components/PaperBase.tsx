@@ -23,7 +23,7 @@ let theme = createMuiTheme({
     palette: {
         primary: {
             light: '#63ccff',
-            main: '#009be5',
+            main: '#9c3300',
             dark: '#006db3',
         },
     },

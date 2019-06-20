@@ -5,13 +5,13 @@ from models import *
 
 
 def get_user_data() -> Tuple[str, int, int]:
-    return (session.get('username'), int(session.get('userid')), int(session.get('type')))
+    return (session.get('username'), int(session.get('userid')), int(session.get('typeid')))
 
 
 def mock_login():
     userid = int(request.args.get('userid'))
-    typ = int(request.args.get('typ'))
-    session['type'] = typ  # 1 for buyer, 0 for seller
+    typ = int(request.args.get('type'))
+    session['typeid'] = typ  # 1 for buyer, 0 for seller
     if typ == 1:
         session['username'] = Buyer.query.\
             filter_by(buyer_id=userid).\

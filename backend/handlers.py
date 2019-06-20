@@ -87,7 +87,7 @@ def update_order_state(order_id: int):
     except Exception:
         return b'', 400
 
-    (_, uid, typ) = get_user_data()
+    (_, uid, typ) = session.get_user_data()
     if target_state == 4 and (
             typ == 1 and order.buyer_id == uid or
             typ == 0 and order.seller_id == uid):  # 取消
