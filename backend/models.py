@@ -18,6 +18,11 @@ class Seller(db.Model):
     username = db.Column(db.String(40), nullable=False, name="UserName")
     balance = db.Column(db.Numeric(25, 2), nullable=False, name="Balance")
 
+class Good(db.Model):
+    __tablename__ = "Good"
+    good_id = db.Column(db.Integer, primary_key=True,
+                         nullable=False, name="GoodID")
+    good_name = db.Column(db.String(255), nullable=False, name="GoodName")
 
 class Order(db.Model):
     __tablename__ = "Order"
@@ -27,9 +32,9 @@ class Order(db.Model):
         'Buyer.BuyerId'), nullable=False, name="BuyerId")
     seller_id = db.Column(db.Integer, db.ForeignKey(
         'Seller.SellerId'), nullable=False, name="SellerId")
-    good_name = db.Column(db.String(255), nullable=False, name="GoodName")
-    good_description = db.Column(
-        db.String(1023), nullable=False, name="GoodDescription")
+    good_id = db.Column(db.Integer, db.ForeignKey(
+        'Good.GoodID'), nullable=False, name="GoodID")
+    numbers = db.Column(db.Integer, nullable=False, name="Numbers")
     order_state = db.Column(db.Integer, nullable=False, name="OrderState")
     order_time = db.Column(TIMESTAMP, nullable=False, name="OrderTime")
     pay_time = db.Column(TIMESTAMP, name="PayTime")
