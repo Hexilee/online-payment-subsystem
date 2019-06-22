@@ -24,9 +24,10 @@ def handle_orders():
         offset = request.args.get('offset', 0)
         limit = request.args.get('limit', 10)
         query = db.session.\
-            query(Order, Seller.username, Buyer.username).\
+            query(Order, Seller.username, Buyer.username, Good.good_name).\
             join(Seller, Seller.seller_id == Order.seller_id).\
-            join(Buyer, Buyer.buyer_id == Order.buyer_id)
+            join(Buyer, Buyer.buyer_id == Order.buyer_id).\
+            join(Good, Good.good_id == Order.good_id)
         if typ == 0:
             query = query.filter(Order.seller_id == uid)
         if typ == 1:
@@ -52,17 +53,18 @@ def handle_orders():
             'items': [{
                 'id': order.order_id,
                 'orderState': order.order_state,
-                'goodName': order.good_name,
-                'goodDescription': order.good_description,
+                'goodName': good_name,
                 'sellerName': seller_name,
                 'buyerName': buyer_name,
+                'goodID': order.good_id,
+                'numbers': order.numbers,
                 'orderTime': try_into_timestamp(order.order_time),
                 'payTime': try_into_timestamp(order.pay_time),
                 'deliverTime': try_into_timestamp(order.deliver_time),
                 'completeTime': try_into_timestamp(order.success_time),
                 'cancelTime': try_into_timestamp(order.cancel_time),
                 'amount': float(order.amount),
-            } for order, seller_name, buyer_name in records]
+            } for order, seller_name, buyer_name, good_name in records]
         })
     else:
         if typ == 1:
