@@ -35,10 +35,7 @@ def handle_orders():
         if order_type != None:
             query = query.filter(Order.order_state == order_type)
         if search_words != "":
-            query = query.filter(or_(
-                Order.good_name.like('%%%s%%' % search_words),
-                Order.good_description.like('%%%s%%' % search_words),
-            ))
+            query = query.filter(Good.good_name.like('%%%s%%' % search_words))
         count = query.count()
         if order_by == 'order_time' or order_by == 'pay_time' or order_by == 'deliver_time' or order_by == 'success_time' or order_by == 'cancel_time':
             query = query.order_by(Order.__dict__[order_by].desc())
