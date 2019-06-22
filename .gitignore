@@ -1,7 +1,8 @@
 .vscode/
 __pycache__/
 dev/
-config.*
+config.ts
+config.py
 node_modules/
 .cache/
 dist/
