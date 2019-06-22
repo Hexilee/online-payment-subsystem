@@ -59,7 +59,7 @@ class AppClass(unittest.TestCase):
 
     def test_login_as_seller(self):
         resp = self.client.post(
-            '/api/mock/session?userid=%s&typ=0' % self.seller['seller_id'])
+            '/api/mock/session?userid=%s&typeid=0' % self.seller['seller_id'])
         self.assertEqual(201, resp.status_code, 'should be created')
         resp = self.client.get('/api/userInfo')
         self.assertEqual(200, resp.status_code, 'should be ok')
@@ -72,7 +72,7 @@ class AppClass(unittest.TestCase):
 
     def test_login_as_buyer(self):
         resp = self.client.post(
-            '/api/mock/session?userid=%s&typ=1' % self.buyer['buyer_id'])
+            '/api/mock/session?userid=%s&typeid=1' % self.buyer['buyer_id'])
         self.assertEqual(201, resp.status_code, 'should be created')
         resp = self.client.get('/api/userInfo')
         self.assertEqual(200, resp.status_code, 'should be ok')
@@ -85,7 +85,7 @@ class AppClass(unittest.TestCase):
 
     def test_pay(self):
         resp = self.client.post(
-            '/api/mock/session?userid=%s&typ=1' % self.buyer['buyer_id'])
+            '/api/mock/session?userid=%s&typeid=1' % self.buyer['buyer_id'])
         self.assertEqual(201, resp.status_code, 'should be created')
 
 

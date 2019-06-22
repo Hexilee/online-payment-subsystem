@@ -10,7 +10,7 @@ def get_user_data() -> Tuple[str, int, int]:
 
 def mock_login():
     userid = int(request.args.get('userid'))
-    typ = int(request.args.get('type'))
+    typ = int(request.args.get('typeid'))
     session['typeid'] = typ  # 1 for buyer, 0 for seller
     if typ == 1:
         session['username'] = Buyer.query.\
