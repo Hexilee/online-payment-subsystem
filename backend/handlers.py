@@ -56,7 +56,7 @@ def handle_orders():
                 'goodName': good_name,
                 'sellerName': seller_name,
                 'buyerName': buyer_name,
-                'goodID': order.good_id,
+                'goodId': order.good_id,
                 'numbers': order.numbers,
                 'orderTime': try_into_timestamp(order.order_time),
                 'payTime': try_into_timestamp(order.pay_time),

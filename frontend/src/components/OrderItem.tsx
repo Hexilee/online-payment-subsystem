@@ -282,9 +282,6 @@ const OrderItem: React.FunctionComponent<OrderItemProps> = (props) => {
                 subheader={`下单时间：${moment(item.orderTime * 1000).format('YYYY/MM/DD HH:mm:ss')}`}
             />
             <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                    {highlightSearchWords(item.goodDescription)}
-                </Typography>
             </CardContent>
             <CardActions disableSpacing>
                 {positiveButton()}
@@ -349,9 +346,10 @@ export class ItemData {
     id: number = 0;
     orderState: number = 0;
     goodName: string = '';
-    goodDescription: string = '';
     sellerName: string = '';
     buyerName: string = '';
+    goodId: number = 0;
+    numbers: number = 0;
     orderTime: number = new Date().getTime() / 1000;
     payTime: number | null = null;
     deliverTime: number | null = null;
@@ -362,6 +360,8 @@ export class ItemData {
 
 const additionalAttr = {
     id: '订单号',
+    goodId: '商品号',
+    numbers: '商品数量',
     orderState: '订单状态',
     sellerName: '卖家',
     buyerName: '买家',
@@ -400,6 +400,8 @@ const displayAttr = (item: ItemData, attr: string): string => {
             // fallthrough
         }
         case 'id':
+        case 'goodId':
+        case 'numbers':
         case 'sellerName':
         case 'buyerName':
             try {
