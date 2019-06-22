@@ -5,22 +5,31 @@ const randomInt = (upto) => Math.floor(Math.random() * Math.floor(upto));
 const gen = () => {
     const items = [];
     for (let key of new Array(1000).keys()) {
-        items.push({
-            OrderState: randomInt(5),
-            GoodName: Random.csentence(),
-            GoodDescription: Random.cparagraph(),
-            BuyerId: 1,
-            SellerId: 1,
-            OrderTime: randomInt(1560109154),
-            PayTime: null,
-            DeliverTime: null,
-            SuccessTime: null,
-            CancelTime: null,
-            Amount: randomInt(10000)
-        });
+        items.push(`
+            INSERT INTO
+                \`Order\` (
+                \`BuyerId\`,
+                \`SellerId\`,
+                \`GoodId\`,
+                \`Numbers\`,
+                \`OrderState\`,
+                \`OrderTime\`,
+                \`Amount\`
+            )
+            VALUES
+            (
+                1,
+                1,
+                ${randomInt(10)},
+                ${randomInt(20)},
+                ${randomInt(4)},
+                NOW(),
+                ${randomInt(10000)}
+            );`
+        )
     }
     return items
 };
 
-console.log(JSON.stringify(snakeize(gen())));
+console.log(gen().join(`\n`));
 

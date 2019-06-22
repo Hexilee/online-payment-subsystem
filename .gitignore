@@ -10,3 +10,4 @@ orders.json
 order-data.json
 *.pyc
 static
+*-data.sql
