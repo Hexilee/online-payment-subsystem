@@ -7,7 +7,7 @@ from typing import List
 def auth_guard(handler):
     @wraps(handler)
     def authenticated_handler(*args, **kwargs):
-        if session.get('username') is None or session.get('userid') is None or session.get('typeid') is None:
+        if session.get('username') is None or session.get('userid') is None or session.get('type') is None:
             return b"", 401
         else:
             return handler(*args, **kwargs)
